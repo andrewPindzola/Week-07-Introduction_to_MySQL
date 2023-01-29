@@ -12,10 +12,13 @@ import projects.service.ProjectsService;
 public class Projects {
 	private Scanner scanner = new Scanner(System.in);
 	private ProjectsService projectsService = new ProjectsService();
+	private Project curProject;
 	// @formatter:off
 	private List<String> operations = List.of(
 		"1) Create and populate all tables",
-		"2) Add a project"
+		"2) Add a project",
+		"3) List projects",
+		"4) Select current project"
 	);
 	// @formatter:on
 	public static void main(String[] args) {
@@ -45,13 +48,53 @@ public class Projects {
 				case 2:
 					addProject();
 					break;
+					
+				case 3:
+					listProjects();
+					break;
+					
+				case 4:
+					selectProject();
+					break;
 			}
 			} catch(Exception e) {
 				System.out.println("\nError: " + e.toString() + " Try again.");
-				
+				e.printStackTrace();
 			}
 		}
 	}
+	private void selectProject() {
+		listProjects();
+		Integer projectId = getIntInput("Enter a project ID to select a project");
+		
+		curProject = null;
+		
+		curProject = projectsService.fetchProjectById(projectId);
+		
+	}
+	private void listProjects() {
+		List<Project> projects = projectsService.fetchAllProjects();
+		
+		System.out.println("\nProjects:");
+		
+		projects.forEach(project -> System.out.println("  " + project.getProjectId() 
+		+ ": " + project.getProjectName()));
+		
+	}
+	public void printOperations() {
+	System.out.println("\nThese are the available selections. Press the Enter key to quit:");
+	System.out.println();
+	System.out.println("Here is what you can do: ");
+	operations.forEach(op -> System.out.println("   " + op));
+	operations.forEach(line -> System.out.println("  " + line));
+		if (Objects.isNull(curProject)) {
+			System.out.println("\nYou are not working with a project");
+		} else {
+			System.out.println("\nYou are working with project: " + curProject);
+		}
+	}
+	
+	
 	private void addProject() {
 		String projectName = getStringInput("Enter the project name");
 		BigDecimal estimatedHours = getDecimalInput("Enter the estimated hours");
@@ -100,12 +143,7 @@ public class Projects {
 		return Objects.isNull(op) ? -1 : op;
 	}
 	
-	private void printOperations() {
-		System.out.println();
-		System.out.println("Here is what you can do: ");
-		operations.forEach(op -> System.out.println("   " + op));
-		
-	}
+	
 	private Integer getIntInput(String prompt) {
 		String input = getStringInput(prompt);
 		

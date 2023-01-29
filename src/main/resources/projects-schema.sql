@@ -17,7 +17,7 @@ CREATE TABLE projects.project (
 );
 
 CREATE TABLE projects.material (
-	material_id INT NOT NULL,
+	material_id INT AUTO_INCREMENT NOT NULL,
 	PRIMARY KEY (material_id),
     project_id INT NOT NULL,
     FOREIGN KEY (project_id) REFERENCES project(project_id)
@@ -28,7 +28,7 @@ CREATE TABLE projects.material (
 );
 
 CREATE TABLE projects.step (
-	step_id INT NOT NULL,
+	step_id INT AUTO_INCREMENT NOT NULL,
     PRIMARY KEY (step_id),
     project_id INT NOT NULL,
     FOREIGN KEY (project_id) REFERENCES project(project_id)
@@ -37,7 +37,7 @@ CREATE TABLE projects.step (
     step_order INT NOT NULL
 );
 CREATE TABLE projects.category (
-	category_id INT NOT NULL,
+	category_id INT AUTO_INCREMENT NOT NULL,
     PRIMARY KEY (category_id),
     category_name VARCHAR(128) NOT NULL
 

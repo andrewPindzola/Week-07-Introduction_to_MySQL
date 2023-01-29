@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import projects.dao.ProjectsDao;
 import projects.entity.Project;
@@ -14,11 +15,16 @@ import projects.exception.DbException;
 
 public class ProjectsService {
 	private static final String SCHEMA_FILE = "projects-schema.sql";
+	private static final String DATA_FILE = "projects-data.sql";
 	
 	private ProjectsDao projectsDao = new ProjectsDao();
 	public void createAndPopulateTables() {
 		loadFromFile(SCHEMA_FILE);
+		loadFromFile(DATA_FILE);
 	}
+	
+	
+	
 	private void loadFromFile(String fileName) {
 		String content = readFileContent(fileName);
 		List<String> sqlStatements = convertContentToSqlStatements(content);
@@ -82,6 +88,13 @@ public class ProjectsService {
 	}
 	public Project addProject(Project project) {
 		return projectsDao.insertProject(project);
+	}
+	public List<Project> fetchAllProjects() {
+		return projectsDao.fetchAllProjects();
+	}
+	public Project fetchProjectById(Integer projectId) {
+		return projectsDao.fetchProjectById(projectId).orElseThrow(() -> new NoSuchElementException(
+				"Project with project ID=" + projectId + " does not exist."));
 	}
 	
 	public static void main(String[] args) {
