@@ -23,7 +23,16 @@ public class ProjectsService {
 		loadFromFile(DATA_FILE);
 	}
 	
-	
+	public void modifyProjectDetails(Project project) {
+		if (!projectsDao.modifyProjectDetails(project)) {
+			throw new DbException("Project with ID=" + project.getProjectId() + " does not exist.");
+		}
+	}
+	public void deleteProject(Integer projectId) {
+		if(!projectsDao.deleteProject(projectId)) {
+			throw new DbException("Project with ID=" + projectId + " does not exist.");
+		}
+	}
 	
 	private void loadFromFile(String fileName) {
 		String content = readFileContent(fileName);
